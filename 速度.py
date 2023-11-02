@@ -55,10 +55,10 @@ y3 = [
 plt.figure(figsize = (8, 4))
 plt.subplots_adjust(bottom = 0.2, left = 0.2) 
 
-plt.plot(t, y0, 'r-', label = r'$Point_0$', lw = 2)
-plt.plot(t, y1, 'g--', label = r'$Point_1$', lw = 3)
-plt.plot(t, y2, 'b-', label = r'$Point_2$', lw = 2)
-plt.plot(t, y3, 'm:', label = r'$Point_3$', lw = 3) 
+plt.plot(t, y0, 'r-', label = r'$Pt0$', lw = 2)
+plt.plot(t, y1, 'g--', label = r'$Pt1$', lw = 3)
+plt.plot(t, y2, 'b-', label = r'$Pt2$', lw = 2)
+plt.plot(t, y3, 'm:', label = r'$Pt3$', lw = 3) 
 
 plt.xlabel(r'$Time(Sec)$').set_fontsize(16) 
 plt.ylabel(r'$Amplitude$').set_fontsize(16)

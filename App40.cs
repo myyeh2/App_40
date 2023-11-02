@@ -14,7 +14,7 @@ namespace ConsoleApp40
 // 初始值 [y1|y2|y3|y4] = [y1, y2, y3, y4]t
 double[,] y0Start = { { -1 }, { 4 }, { 1 }, { 1 } };
 
-// 系統矩陣A0，並Cast為實數矩陣類別A。 
+// 系統矩陣A0，並轉換為實數矩陣物件 A。 
 double[,] A0 =  { {0, 0, 1, 0}, {0, 0, 0, 1}, 
     {-2, 1.5, 0, 0}, {1.33333, -3, 0, 0 } }; 
 ReMatrix A = new ReMatrix(A0);
@@ -25,6 +25,7 @@ CxMatrix D = eig.CxMatrixD;
 CxMatrix V = eig.CxVector;
 CxMatrix Q = eig.CxMatrixQ;
 
+// 狀態[空間]變數響應函數 CxToHexp ， 係數向量 d ，兩者均爲複數。 
 CxToHexp Hexp = new CxToHexp(D, Q, 0);
 CxMatrix MatTemp = Hexp.GetCxMatrix;
 CxMatrix d = ~MatTemp * y0Start;
