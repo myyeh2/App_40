@@ -28,14 +28,6 @@
 
 
 
-![](Images/11-01-03.png)  
-<!--    
-###  \[{  \color{Blue}  解析後之狀態變數響應數學式如下 ：  }\]
-####  \[{  \color{Blue} y_0(t) \; = \; - \frac { \sqrt 2 } { 10 } \; \sin ( \sqrt{2} \; t ) + \frac {\sqrt 3} {5} \; \sin \; ( 2 \; \sqrt 3 \; t )     }\]
-####  \[{  \color{Blue} y_1(t) \; = \; - \frac { \sqrt 2 } {5} \; \sin ( \sqrt{2} \; t ) + \frac {\sqrt 3} {10} \; \sin \; ( 2 \; \sqrt 3 \; t )     }\]
---> 
-
-
 --- 
 ![](Images/11-01-04.png)  
 <!--        
