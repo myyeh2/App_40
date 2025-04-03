@@ -1,99 +1,83 @@
-﻿// William E. Boyce/Richard C. DiPrima, "Elementary Differential
+﻿// .NET 8, Project Name @ C:\2302\Misc_10\App_40 
+// William E. Boyce/Richard C. DiPrima, "Elementary Differential
 // Equations and Boundary Value Problems 10th Ed." 第413頁-416頁 
 
-using System;
-using Matrix_0;
+using Matrix_0; 
 
-namespace ConsoleApp40
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-
-// 初始值 [y1|y2|y3|y4] = [y1, y2, y3, y4]t
+// 已知數據(m=4, r=1)，包含初始值和系統矩陣A  
 double[,] y0Start = { { -1 }, { 4 }, { 1 }, { 1 } };
-
-// 系統矩陣A0，並轉換為實數矩陣物件 A。 
-double[,] A0 =  { {0, 0, 1, 0}, {0, 0, 0, 1}, 
-    {-2, 1.5, 0, 0}, {1.33333, -3, 0, 0 } }; 
+double[,] A0 =  { {0, 0, 1, 0}, {0, 0, 0, 1},
+    {-2, 1.5, 0, 0}, {1.33333, -3, 0, 0 } };
 ReMatrix A = new ReMatrix(A0);
 
-// 系統特徵值V和特徵向量Q。
+// 複數特徵矩陣D和複數模態矩陣Q 
 EIG eig = new EIG(A);
 CxMatrix D = eig.CxMatrixD;
-CxMatrix V = eig.CxVector;
 CxMatrix Q = eig.CxMatrixQ;
 
-// 狀態[空間]變數響應函數 CxToHexp ， 係數向量 d ，兩者均爲複數。 
-CxToHexp Hexp = new CxToHexp(D, Q, 0);
+// 複數向量係數 d 
+CxHexp Hexp = new CxHexp(D, Q, 0);
 CxMatrix MatTemp = Hexp.GetCxMatrix;
 CxMatrix d = ~MatTemp * y0Start;
 
-// 列印系統與狀態狀態參數。
+// 列印系統特徵矩陣、模態矩陣、和係數向量。
 Console.Write("\n****{0,7}系{0,5}統{0,5}與{0,5}狀{0,5}態{0,5}參{0,5}數{0,7}****\n", "");
+Console.Write("\n***{0,5}特徵矩陣 D{0,5}***\n{1}\n", "", new PR(D));
+Console.Write("\n***{0,5}模態矩陣 Q{0,5}***\n{1}\n", "", new PR(Q));
+Console.Write("\n***{0,5}向量係數 d{0,5}***\n{1}\n", "", new PR(d));
 
-Console.Write("\n***{0,5}系統特徵值V{0,5}***\n{1}\n", "", new PR(V));
-Console.Write("\n***{0,5}系統特徵向量Q{0,5}***\n{1}\n", "", new PR(Q));
-Console.Write("\n***{0,5}係數向量d{0,5}***\n{1}\n", "", new PR(d));
-
+// 建構Disp、Vel、和Acc等三個空的儲存矩陣
 double step = 0.5;
 int iRow = (int)(20 / step + 1);
-int iCol = 4 + 1;
+int iCol = 5; // 4 + 1
 ReMatrix Disp = new ReMatrix(iRow, iCol);
 ReMatrix Vel = new ReMatrix(iRow, iCol);
-    
+
+//將計算的結果存入Vel、Dis、和Acc矩陣中 
 for (int i = 0; i != iRow; i++)
 {
     double t = step * i;
-
-    Hexp = new CxToHexp(D, Q, t);
+    Hexp = new CxHexp(D, Q, t);
     MatTemp = Hexp.GetCxMatrix;
-    CxMatrix yh_Cx = MatTemp * d;
-    ReMatrix yh_Re = (ReMatrix)yh_Cx;
-    ReMatrix yhDot_Re = A * yh_Re;
+    ReMatrix yh_Re = (ReMatrix)(MatTemp * d);
 
+    // 位移
+    Disp.Matrix[i, 0] = t;
+    Disp.Matrix[i, 1] = yh_Re.Matrix[0, 0];
+    Disp.Matrix[i, 2] = yh_Re.Matrix[1, 0];
+    Disp.Matrix[i, 3] = yh_Re.Matrix[2, 0];
+    Disp.Matrix[i, 4] = yh_Re.Matrix[3, 0];
+
+    // 速度 
+    ReMatrix yhDot_Re = A * yh_Re;
     Vel.Matrix[i, 0] = t;
     Vel.Matrix[i, 1] = yhDot_Re.Matrix[0, 0];
     Vel.Matrix[i, 2] = yhDot_Re.Matrix[1, 0];
     Vel.Matrix[i, 3] = yhDot_Re.Matrix[2, 0];
     Vel.Matrix[i, 4] = yhDot_Re.Matrix[3, 0];
-
-    Disp.Matrix[i, 0] = t;
-    Disp.Matrix[i, 1] = yh_Re.Matrix[0, 0];
-    Disp.Matrix[i, 2] = yh_Re.Matrix[1, 0];
-    Disp.Matrix[i, 3] = yh_Re.Matrix[2, 0];
-    Disp.Matrix[i, 4] = yh_Re.Matrix[3, 0]; 
 }
 
-// 列印狀態響應，節點之變位與速度。 
-Console.Write("\n****{0,10}狀{0,7}態{0,7}響{0,7}應{0,10}****\n", ""); 
-
+// 列印節點之狀態響應(變位，速度、和加速度)，適用於Excel繪圖  
+Console.Write("\n****{0,10}狀{0,7}態{0,7}響{0,7}應{0,10}****\n", "");
 Console.Write("\n{0,5}***位移反應量***{0,5}\n{0,8}時間(秒)" +
-"{0,8}第0點位移{0,8}第1點位移{0,8}第2點位移{0,8}第3點位移\n\n{1}", 
+"{0,8}第0點位移{0,8}第1點位移{0,8}第2點位移{0,8}第3點位移\n\n{1}",
 "", new PR(Disp));
 Console.Write("\n{0,5}***速度反應量***{0,5}\n{0,8}時間(秒)" +
-"{0,8}第0點速度{0,8}第1點速度{0,8}第2點速度{0,8}第3點速度\n\n{1}", 
+"{0,8}第0點速度{0,8}第1點速度{0,8}第2點速度{0,8}第3點速度\n\n{1}",
 "", new PR(Vel));
 
-//列印時間、節點變位、和速度等序列。
-Console.Write("\n時間序列 : \n{0}\n", 
-    new PR4(Disp, 0, "{0,8:F2}")); 
-
+//列印時間、變位、和速度等序列，使用於Matplotlib.pyplot套件繪圖 
+Console.Write("\n時間序列 : \n{0}\n", new PR4(Disp, 0, "{0,8:F2}"));
 Console.Write("\n第0點變位序列 : \n{0}\n", new PR4(Disp, 1));
 Console.Write("\n第1點變位序列 : \n{0}\n", new PR4(Disp, 2));
 Console.Write("\n第2點變位序列 : \n{0}\n", new PR4(Disp, 3));
 Console.Write("\n第3點變位序列 : \n{0}\n", new PR4(Disp, 4));
-
 Console.Write("\n第0點速度序列 : \n{0}\n", new PR4(Vel, 1));
 Console.Write("\n第1點速度序列 : \n{0}\n", new PR4(Vel, 2));
 Console.Write("\n第2點速度序列 : \n{0}\n", new PR4(Vel, 3));
 Console.Write("\n第3點速度序列 : \n{0}\n", new PR4(Vel, 4));
-        }
-    }
-}
 
-/*
+/* 輸出結果如下 ： 
 ****       系     統     與     狀     態     參     數       ****
 
 ***     系統特徵值V     ***
@@ -309,6 +293,4 @@ Console.Write("\n第3點速度序列 : \n{0}\n", new PR4(Vel, 4));
   -1.3109,   -10.4947,    -9.5514,     0.8987,    11.3171,
   12.0000,     2.0304,    -9.8078,   -13.0125,    -4.9250,
    6.8956,
-
-請按任意鍵繼續 . . .
 */
