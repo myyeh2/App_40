@@ -35,9 +35,9 @@
 
 ---
 
- ***空間維度【Space Dimension】上共有四個自由度 Degree of Freedom(m = 4)，狀態維度【State Dimension】僅有一個自由度，即一階微分(r = 1)，時間維度【Time Dimension】是時間的函數，可以任意選取，故整個狀態矩陣【系統矩陣】為4X4的實數矩陣，CSharp 程式碼的開頭引用 Matrix_0 類別庫。***
+ ***線性矩陣微分方程式共有三個互為垂直的維度(3-Dimension)，（1）是空間維度【Space Dimension】，共有四個自由度 Degree of Freedom(m = 4)，(2)狀態維度【State Dimension】有一個自由度，即一階微分(r = 1)，(3)時間維度【Time Dimension】只有一個連續性的時間自由度【t】，建構整個系統狀態空間(State Space)矩陣【A】，即系統矩陣為4X4( mxr X mxr )的實數正方形矩陣，CSharp 程式碼的開頭引用 Matrix_0 類別庫。***
 
-***雖然輸入的系統矩陣是實數，在計算的過程中，系統特徵值矩陣【對應虛數值部分】和特徵向量矩陣，對應是角速度【頻率】和模態，其預設值(Default Value)都是複數矩陣(Complex Matrix)，最後輸出結果應該是實數，參考程式碼的輸出結果。*** 
+***雖然輸入的系統矩陣是實數，在計算的過程中，系統【特徵矩陣】和【模態矩陣】，兩者的預設值(Default Value)都是複數矩陣(Complex Matrix)，最後計算後的輸出響應值一定是實數，參考程式碼的輸出結果。***  
 
 ---
 
